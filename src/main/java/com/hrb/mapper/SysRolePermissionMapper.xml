@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hrb.mapper.SysRolePermissionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hrb.entity.SysRolePermission">
+        <id column="rid" property="rid" />
+        <result column="pid" property="pid" />
+    </resultMap>
+
+
+    <select id="findByUserId">
+        SELECT DISTINCT r2.* FROM sys_role_permission rp
+           INNER JOIN sys_role r2 ON rp.rid=r2.id
+             WHERE r2.id
+             IN (SELECT r.id FROM sys_role r INNER JOIN sys_role_user ru ON r.id=ru.rid
+                  WHERE ru.uid=(SELECT id FROM sys_user WHERE id=#{uId})
+                )
+    </select>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        rid, pid
+    </sql>
+
+</mapper>
